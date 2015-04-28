@@ -11,7 +11,7 @@
 ##                                                                                               'q6':[['HALT'],['HALT'],['HALT']]},'q6')
 
 
-## Defining a TM class first so that it can be passed to the UTM
+## Defining a TM class first so that it can be passed to the UTM:: M = (States, Input_alphabet, Tape_alphabet, Transition_function, Start_state, Blank_symbol, Finish_state)
         ## @@====================================================================================
         ## Note that the transition function can be predefined and be passed by reference.
         ## It is highly recommended (i.e. don't deviate from this method) to define the transition
@@ -46,10 +46,8 @@ class UTM:
                 self.winput = list(winput)
                 self.states = TM.getStates()
                 self.talphabet = TM.getTapeAlphabet()
-                self.transition = TM.getTransitionFunction
+                self.transition = TM.getTransitionFunction()
                 self.start_state = 'q0'
-                self.current_state = ''
-                self.next_state = ''
                 self.blank = '-'
                 self.accept = TM.getAcceptState()
                 self.tape = {}
@@ -57,10 +55,30 @@ class UTM:
         def loadTape(self):
                 for i in range(len(self.winput)):
                         self.tape[i] = self.winput[i]
-                print(self.tape)
+                #print(self.tape)
 
         def runUTM(self):
-                current_element = self.winput[0]
+                self.loadTape()
+                current_state = self.start_state
+                current_input_key = '0' #input has been loaded onto tape using traditional indexing so first input will be 0
+                halt = False
+##                while(halt==False):
+##                        transition_step = self.transition[current_state]
+                transition_step = self.transition[current_state]
+                        
+
+Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[['q1','-','R'],['q5','-','R'],['HALT']],
+                                                                                               'q1':[['q1','0','R'],['q2','1','R'],['HALT']],
+                                                                                               'q2':[['q3','1','L'],['q2','1','R'],['q4','-','L']],
+                                                                                               'q3':[['q3','0','L'],['q3','1','L'],['q0','-','R']],
+                                                                                               'q4':[['q4','0','L'],['q4','-','L'],['q6','0','R']],
+                                                                                               'q5':[['q5','-','R'],['q5','-','R'],['q6','-','R']],
+                                                                                               'q6':[['HALT'],['HALT'],['HALT']]},'q6')
+
+modus_utm = UTM(Modus_TM,'000100')
+modus_utm.runUTM()
+
+               
         
 
                 
