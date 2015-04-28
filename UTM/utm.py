@@ -39,6 +39,9 @@ class TM:
         def getAcceptState(self):
                 return self.finish_state
 
+        def getBlankSymbol(self):
+                return self.blank_sym
+
 ## Defining the UTM
 ## The input, winput, for the UTM is assumed to be of a String data type
 class UTM:
@@ -48,7 +51,7 @@ class UTM:
                 self.talphabet = TM.getTapeAlphabet()
                 self.transition = TM.getTransitionFunction()
                 self.start_state = 'q0'
-                self.blank = '-'
+                self.blank = TM.getBlankSymbol()
                 self.accept = TM.getAcceptState()
                 self.tape = {}
 
@@ -67,23 +70,34 @@ class UTM:
                 head_counter = 0
                 next_state = ''
                 while(halt==False):
-                        transition_row = self.transition[current_state]
+                        transition_row = self.transition[current_state]# Find the proper transition row for the current state
                         print("Transition Row: "+str(transition_row))
-                        for i in range(len(transition_row)): #find the proper transition row for the current state
-                                transition_bloc = transition_row[i]
+                        for i in range(len(transition_row)): 
+                                transition_bloc = transition_row[i]# Find the proper bloc (mini-dictionary) transition for the current row
                                 print("Transition Bloc: "+str(transition_bloc))
-                                if transition_bloc[current_input_key]: # find the proper truple for a given input
+                                if transition_bloc[current_input_key]: # Find the proper truple for a given input
                                         print("Transition Bloc with Key: "+str(transition_bloc[current_input_key]))
-                                        next_state = transition_bloc[current_input_key][0]
+                                        next_state = transition_bloc[current_input_key][0] # Get the next State
                                         print("Next State: "+next_state)
                                         if next_state == 'HALT':
                                                 print("HALT STATE REACHED")
-                                                break
-                                        if next_state == self.accept:
-                                                print("ACCEPT STATE REACHED")
-                                                break
+                                                if next_state == 'HALT' and current_state == self.accept:
+                                                        print("String has been accepted and consumed")
+                                                        halt = True
+                                                        break
+                                                elif next_state == 'HALT' and current_state != self.accept:
+                                                        halt = True
+                                                        print("String cannot be consumed")
+                                                        break                                    
                                         break
-                        
+                                        self.tape[head_counter] = transition_bloc[current_input_key][1]# Writie this into the current position
+                                        move_where = transition_bloc[current_input_key][2]
+                                        if move_where == 'R':
+                                                head_counter+=1
+                                        elif move_where == 'L':
+                                                head_counter -=1
+                                                
+                        current_state = next_state
                         halt = True
                 
                 
@@ -95,7 +109,7 @@ Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','
                                                                'q3':[{'0':['q3','0','L']},{'1':['q3','1','L']},{'-':['q0','-','R']}],
                                                                'q4':[{'0':['q4','0','L']},{'1':['q4','-','L']},{'-':['q6','0','R']}],
                                                                'q5':[{'0':['q5','-','R']},{'1':['q5','-','R']},{'-':['q6','-','R']}],
-                                                               'q6':[{'0':['HALT']},['HALT'],['HALT']]},'q6')
+                                                               'q6':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q6')
 
 modus_utm = UTM(Modus_TM,'000100')
 modus_utm.runUTM()
