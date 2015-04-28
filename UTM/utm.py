@@ -2,20 +2,24 @@
 ## Class: CS 125, UVM Spring 2015
 ## Project: Universal Turing Machine Challenge
 
-## Simple Sample call to TM class:  Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[['q1','-','R'],['q5','-','R'],['HALT']],
-##                                                                                               'q1':[['q1','0','R'],['q2','1','R'],['HALT']],
-##                                                                                               'q2':[['q3','1','L'],['q2','1','R'],['q4','-','L']],
-##                                                                                               'q3':[['q3','0','L'],['q3','1','L'],['q0','-','R']],
-##                                                                                               'q4':[['q4','0','L'],['q4','-','L'],['q6','0','R']],
-##                                                                                               'q5':[['q5','-','R'],['q5','-','R'],['q6','-','R']],
-##                                                                                               'q6':[['HALT'],['HALT'],['HALT']]},'q6')
+## Simple Sample call to TM class:  Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],
+##                                                              {'q0':[{'0':['q1','-','R']},{'1':['q5','-','R']},{'-':['HALT']}],
+##                                                               'q1':[{'0':['q1','0','R']},{'1':['q2','1','R']},{'-':['HALT']}],
+##                                                               'q2':[{'0':['q3','1','L']},{'1':['q2','1','R']},{'-':['q4','-','L']}],
+##                                                               'q3':[{'0':['q3','0','L']},{'1':['q3','1','L']},{'-':['q0','-','R']}],
+##                                                               'q4':[{'0':['q4','0','L']},{'1':['q4','-','L']},{'-':['q6','0','R']}],
+##                                                               'q5':[{'0':['q5','-','R']},{'1':['q5','-','R']},{'-':['q6','-','R']}],
+##                                                               'q6':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q6')
+
+
 
 
 ## Defining a TM class first so that it can be passed to the UTM:: M = (States, Input_alphabet, Tape_alphabet, Transition_function, Start_state, Blank_symbol, Finish_state)
         ## @@====================================================================================
         ## Note that the transition function can be predefined and be passed by reference.
         ## It is highly recommended (i.e. don't deviate from this method) to define the transition
-        ## function as a dictionary input.
+        ## function as a dictionary input and it should follow the general form:
+        ## {'state':[{'input':['NextState','TapeSymbol','HeadDirection']},{...},{...}...]}
         ## @@====================================================================================
 class TM:
         def __init__(self, states, tape_alpha, transition_func, finish_state):
