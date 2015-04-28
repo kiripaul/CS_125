@@ -60,20 +60,42 @@ class UTM:
         def runUTM(self):
                 self.loadTape()
                 current_state = self.start_state
-                current_input_key = '0' #input has been loaded onto tape using traditional indexing so first input will be 0
+                current_input_key = self.tape[0]
+                print("Current Input Key: "+current_input_key)
+                print("Starting State: "+current_state)
                 halt = False
-##                while(halt==False):
-##                        transition_step = self.transition[current_state]
-                transition_step = self.transition[current_state]
+                head_counter = 0
+                next_state = ''
+                while(halt==False):
+                        transition_row = self.transition[current_state]
+                        print("Transition Row: "+str(transition_row))
+                        for i in range(len(transition_row)): #find the proper transition row for the current state
+                                transition_bloc = transition_row[i]
+                                print("Transition Bloc: "+str(transition_bloc))
+                                if transition_bloc[current_input_key]: # find the proper truple for a given input
+                                        print("Transition Bloc with Key: "+str(transition_bloc[current_input_key]))
+                                        next_state = transition_bloc[current_input_key][0]
+                                        print("Next State: "+next_state)
+                                        if next_state == 'HALT':
+                                                print("HALT STATE REACHED")
+                                                break
+                                        if next_state == self.accept:
+                                                print("ACCEPT STATE REACHED")
+                                                break
+                                        break
+                        
+                        halt = True
+                
+                
                         
 
-Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[['q1','-','R'],['q5','-','R'],['HALT']],
-                                                                                               'q1':[['q1','0','R'],['q2','1','R'],['HALT']],
-                                                                                               'q2':[['q3','1','L'],['q2','1','R'],['q4','-','L']],
-                                                                                               'q3':[['q3','0','L'],['q3','1','L'],['q0','-','R']],
-                                                                                               'q4':[['q4','0','L'],['q4','-','L'],['q6','0','R']],
-                                                                                               'q5':[['q5','-','R'],['q5','-','R'],['q6','-','R']],
-                                                                                               'q6':[['HALT'],['HALT'],['HALT']]},'q6')
+Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','-','R']},{'1':['q5','-','R']},{'-':['HALT']}],
+                                                               'q1':[{'0':['q1','0','R']},{'1':['q2','1','R']},{'-':['HALT']}],
+                                                               'q2':[{'0':['q3','1','L']},{'1':['q2','1','R']},{'-':['q4','-','L']}],
+                                                               'q3':[{'0':['q3','0','L']},{'1':['q3','1','L']},{'-':['q0','-','R']}],
+                                                               'q4':[{'0':['q4','0','L']},{'1':['q4','-','L']},{'-':['q6','0','R']}],
+                                                               'q5':[{'0':['q5','-','R']},{'1':['q5','-','R']},{'-':['q6','-','R']}],
+                                                               'q6':[{'0':['HALT']},['HALT'],['HALT']]},'q6')
 
 modus_utm = UTM(Modus_TM,'000100')
 modus_utm.runUTM()
