@@ -91,9 +91,11 @@ class UTM:
                                         print("String has been accepted and consumed")
                                         print(self.tape)
                                         halt = True
+                                        break
                                 elif next_state == 'HALT' and self.current_state != self.accept:
                                         halt = True
                                         print("String cannot be consumed")
+                                        break
                                 self.current_state = next_state   # Setting the current state to be the next state
                                 print("New Symbol to be Written: "+self.transition_bloc[1])
                                 print("Head Counter At: " + str(head_counter))
@@ -119,17 +121,17 @@ class UTM:
                                 if move_where == 'R':
                                         head_counter+=1
                                         if head_counter >= original_input_string_length:
-                                                self.next_input_key = self.blank_sym
+                                                self.next_input_key = self.blank
                                         elif head_counter < 0:
-                                                self.next_input_key = self.blank_sym
+                                                self.next_input_key = self.blank
                                         else:
                                                  self.next_input_key= self.tape[head_counter]
                                 elif move_where == 'L':
                                         head_counter -=1
                                         if head_counter >= original_input_string_length:
-                                                self.next_input_key = self.blank_sym
+                                                self.next_input_key = self.blank
                                         elif head_counter < 0:
-                                                self.next_input_key = self.blank_sym
+                                                self.next_input_key = self.blank
                                         else:
                                                  self.next_input_key= self.tape[head_counter]
                                         
