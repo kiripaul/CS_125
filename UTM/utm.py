@@ -98,26 +98,10 @@ class UTM:
                                         break
                                 self.current_state = next_state   # Setting the current state to be the next state
                                 print("New Symbol to be Written: "+self.transition_bloc[1])
-                                print("Head Counter At: " + str(head_counter))
+##                                print("Head Counter At: " + str(head_counter))
                                 self.tape[head_counter] = self.transition_bloc[1]# Writie this symbol into the current position
-##                                if head_counter >= original_input_string_length: # i.e the tape has excceed original max length
-##                                        self.tape[head_counter] = self.transition_bloc[1] # Expanding the tape dictionary
-##                                        self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
-##                                        self.next_input_key = self.blank_sym
-##                                        print(head_counter)     
-##                                elif head_counter < 0:                          # i.e the tape has fallen below it's original max length
-##                                        self.tape[head_counter] = self.transition_bloc[1]
-##                                        self.tape = collections.OrderedDict(sorted(self.tape.items()))
-##                                        self.current_input_key = self.blank_sym
-##                                        print(head_counter)
-##                                else:                                           # i.e. the tape is within acceptable range
-##                                        self.tape[head_counter] = self.transition_bloc[1]# Writie this symbol into the current position
-                                        
-                                        # move head counter
-                                        #find next symbol
-##                                        self.current_input_key = self.tape[head_counter] # Move the head to the next position on the tape and make it the current key
                                 move_where = self.transition_bloc[2] # Figure out where head moves
-                                print("Moving to the: "+move_where)
+##                                print("Moving to the: "+move_where)
                                 if move_where == 'R':
                                         head_counter+=1
                                         if head_counter >= original_input_string_length:
@@ -137,13 +121,14 @@ class UTM:
                                         
                                 self.current_input_key = self.next_input_key # Move the head to the next position on the tape and make it the current key
                                 self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
-                                print("Head Counter At: " + str(head_counter))        
+##                                print("Head Counter At: " + str(head_counter))        
                                 print("Next Input Key: "+self.current_input_key)
                                 print(self.tape)
                                 print("Moving On............................")
                         except KeyError:
                                 print("Key Error")
-                                pass                
+                                pass
+                        
                 print(self.tape)
 
 Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','-','R']},{'1':['q5','-','R']},{'-':['HALT']}],
