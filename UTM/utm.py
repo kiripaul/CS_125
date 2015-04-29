@@ -65,6 +65,15 @@ class UTM:
                 for i in range(len(self.winput)):
                         self.tape[i] = self.winput[i]
                 print(self.tape)
+                
+        def finalPrint(self):
+                final_tape = self.tape
+                that_list = []
+                for thing in sorted(final_tape.keys()):
+                        value = final_tape[thing]
+                        that_list.append(value)
+                str1 = ''.join(that_list)
+                self.final_tape = str1
 
         def runUTM(self):
                 import collections
@@ -75,6 +84,11 @@ class UTM:
                 original_input_string_length = len(self.tape)
                 halt = False
                 head_counter = 0
+                iterations = 1
+                self.finalPrint()
+                print("==================================================================")
+                print(" >>>>>>>>>>>>> Start String: "+self.final_tape+" <<<<<<<<<<<<<<<")
+                print("==================================================================")
                 while(halt==False):
                         print("Current Input on Tape: "+self.current_input_key)
                         print("Current State of TM: "+self.current_state)
@@ -89,7 +103,7 @@ class UTM:
                                 print("Next State: "+next_state)
                                 if next_state == 'HALT' and self.current_state == self.accept:
                                         print("String has been accepted and consumed")
-                                        print(self.tape)
+                                        #print(self.tape)
                                         halt = True
                                         break
                                 elif next_state == 'HALT' and self.current_state != self.accept:
@@ -123,16 +137,26 @@ class UTM:
                                 self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
 ##                                print("Head Counter At: " + str(head_counter))        
                                 print("Next Input Key: "+self.current_input_key)
-                                print(self.tape)
                                 print("Moving On............................")
+                                self.finalPrint()
+                                print("Current Tape: "+self.final_tape)
+                                print("==================================================================")
+                                print("============================>>>"+str(iterations)+"<<<==============================")
+                                print("==================================================================")
+                                iterations +=1
                         except KeyError:
                                 print("Key Error")
                                 pass
                         
-                print(self.tape)
+                self.finalPrint()
+                print("Final String: "+self.final_tape)
+                print("==================================================================")
+                print("==========================>>>COMPLETE!<<<=========================")
+                print("==================================================================")
 
 
-Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','-','R']},{'1':['q5','-','R']},{'-':['HALT']}],
+
+Monus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','-','R']},{'1':['q5','-','R']},{'-':['HALT']}],
                                                                'q1':[{'0':['q1','0','R']},{'1':['q2','1','R']},{'-':['HALT']}],
                                                                'q2':[{'0':['q3','1','L']},{'1':['q2','1','R']},{'-':['q4','-','L']}],
                                                                'q3':[{'0':['q3','0','L']},{'1':['q3','1','L']},{'-':['q0','-','R']}],
@@ -140,13 +164,16 @@ Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','
                                                                'q5':[{'0':['q5','-','R']},{'1':['q5','-','R']},{'-':['q6','-','R']}],
                                                                'q6':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q6')
 
-modus_utm = UTM(Modus_TM,'000100')
-#modus_utm.runUTM()
+monus_utm = UTM(Monus_TM,'000100')
+#monus_utm.runUTM()
 
 ##(States, Input_alphabet, Tape_alphabet, Transition_function, Start_state, Blank_symbol, Finish_state)
                
 Non_Terminating_TM = TM(['q0','q1'],[0,1,'-'],{'q0':[{'0':['q0','1','R']},{'-':['q1','-','L']}],
                                             'q1':[{'1':['q1','0','L']},{'-':['q0','-','R']}] },'q2')
 nt_utm = UTM(Non_Terminating_TM,'00000')
-nt_utm.runUTM()
-                
+#nt_utm.runUTM()
+
+Busy_Beaver_3_TM = TM(['q0','q1','q2'],[0,1,'-'],{'q0':[{'0':['q1','1','R']}],
+                                                  'q1':[{'0':['q2','0','R']}],
+                                                  'q2':[{'0':['q2','1','L']}]},'q0')
