@@ -66,43 +66,55 @@ class UTM:
 
         def runUTM(self):
                 self.loadTape()
-                current_state = self.start_state
-                current_input_key = self.tape[0]
-                print("Current Input Key: "+current_input_key)
-                print("Starting State: "+current_state)
+                self.current_state = self.start_state
+                self.current_input_key = self.tape[0]
+                original_input_string_length = len(self.tape)
                 halt = False
                 head_counter = 0
                 next_state = ''
                 while(halt==False):
-                        transition_row = self.transition[current_state]# Find the proper transition row for the current state
+                        print("Current Input Key: "+self.current_input_key)
+                        print("Current State: "+self.current_state)
+                        transition_row = self.transition[self.current_state]# Looking for which state transition we need given the current state
                         print("Transition Row: "+str(transition_row))
                         for i in range(len(transition_row)): 
-                                transition_bloc = transition_row[i]# Find the proper bloc (mini-dictionary) transition for the current row
+                                transition_bloc = transition_row[i]# We now have the state transition for the current state and need to look up where to go now based on our given input string
                                 print("Transition Bloc: "+str(transition_bloc))
                                 if transition_bloc[current_input_key]: # Find the proper truple for a given input
-                                        print("Transition Bloc with Key: "+str(transition_bloc[current_input_key]))
-                                        next_state = transition_bloc[current_input_key][0] # Get the next State
+                                        print("Transition Bloc with Key: "+str(transition_bloc[self.current_input_key]))
+                                        next_state = transition_bloc[self.current_input_key][0] # Get the next State
                                         print("Next State: "+next_state)
                                         if next_state == 'HALT':
                                                 print("HALT STATE REACHED")
-                                                if next_state == 'HALT' and current_state == self.accept:
+                                                if next_state == 'HALT' and self.current_state == self.accept:
                                                         print("String has been accepted and consumed")
+                                                        print(self.tape)
                                                         halt = True
                                                         break
-                                                elif next_state == 'HALT' and current_state != self.accept:
+                                                elif next_state == 'HALT' and self.current_state != self.accept:
                                                         halt = True
                                                         print("String cannot be consumed")
                                                         break                                    
-                                        break
-                                        self.tape[head_counter] = transition_bloc[current_input_key][1]# Writie this into the current position
-                                        move_where = transition_bloc[current_input_key][2]
+                                        print("Current Symbol: "+self.tape[head_counter])
+                                        self.tape[head_counter] = transition_bloc[self.current_input_key][1]# Writie this into the current position
+                                        print("New Symbol to be Written: "+transition_bloc[self.current_input_key][1])
+                                        move_where = transition_bloc[self.current_input_key][2] # Figure out where head moves
+                                        ##===========================================================
+                                        ## Keeping track of where the head is this way so that negative
+                                        ## indicies can be added to the dictionary which represents the tape
+                                        ##===========================================================
                                         if move_where == 'R':
                                                 head_counter+=1
                                         elif move_where == 'L':
                                                 head_counter -=1
-                                                
-                        current_state = next_state
-                        halt = True
+                                else:
+                                        break
+                                self.current_state = next_state
+                                current_input_key = self.tape[head_counter]
+                                print("Next Input Key: "+self.current_input_key)
+                                print("Moving On............................")
+                                #halt = True
+                                break
                 
                 
                         
