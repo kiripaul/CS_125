@@ -67,9 +67,11 @@ class UTM:
                 print(self.tape)
 
         def runUTM(self):
+                import collections
                 self.loadTape()
                 self.current_state = self.start_state
-                self.current_input_key = self.tape[0]
+                self.current_input_key = self.tape[0] #current index on tape
+                self.next_input_key = ''
                 original_input_string_length = len(self.tape)
                 halt = False
                 head_counter = 0
@@ -77,7 +79,7 @@ class UTM:
                         print("Current Input on Tape: "+self.current_input_key)
                         print("Current State of TM: "+self.current_state)
                         transition_row = self.transition[self.current_state]# Looking for which state transition we need given the current state
-##                        print("Transition Row: "+str(transition_row))
+                        print("Transition Row: "+str(transition_row))
                         try:
                                 for item in transition_row:
                                         if self.current_input_key in item: # Looking for the proper transition given our key
@@ -92,25 +94,53 @@ class UTM:
                                 elif next_state == 'HALT' and self.current_state != self.accept:
                                         halt = True
                                         print("String cannot be consumed")
-                                self.current_state = next_state        
-                                print("Current Symbol: "+self.tape[head_counter])
-                                self.tape[head_counter] = self.transition_bloc[1]# Writie this into the current position
+                                self.current_state = next_state   # Setting the current state to be the next state
                                 print("New Symbol to be Written: "+self.transition_bloc[1])
+                                print("Head Counter At: " + str(head_counter))
+                                self.tape[head_counter] = self.transition_bloc[1]# Writie this symbol into the current position
+##                                if head_counter >= original_input_string_length: # i.e the tape has excceed original max length
+##                                        self.tape[head_counter] = self.transition_bloc[1] # Expanding the tape dictionary
+##                                        self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
+##                                        self.next_input_key = self.blank_sym
+##                                        print(head_counter)     
+##                                elif head_counter < 0:                          # i.e the tape has fallen below it's original max length
+##                                        self.tape[head_counter] = self.transition_bloc[1]
+##                                        self.tape = collections.OrderedDict(sorted(self.tape.items()))
+##                                        self.current_input_key = self.blank_sym
+##                                        print(head_counter)
+##                                else:                                           # i.e. the tape is within acceptable range
+##                                        self.tape[head_counter] = self.transition_bloc[1]# Writie this symbol into the current position
+                                        
+                                        # move head counter
+                                        #find next symbol
+##                                        self.current_input_key = self.tape[head_counter] # Move the head to the next position on the tape and make it the current key
                                 move_where = self.transition_bloc[2] # Figure out where head moves
                                 print("Moving to the: "+move_where)
-                                ##===========================================================
-                                ## Keeping track of where the head is so that negative indicies
-                                ## can be added to the dictionary which represents the tape
-                                ##===========================================================
                                 if move_where == 'R':
                                         head_counter+=1
+                                        if head_counter >= original_input_string_length:
+                                                self.next_input_key = self.blank_sym
+                                        elif head_counter < 0:
+                                                self.next_input_key = self.blank_sym
+                                        else:
+                                                 self.next_input_key= self.tape[head_counter]
                                 elif move_where == 'L':
                                         head_counter -=1
-                                self.current_input_key = self.tape[head_counter]
+                                        if head_counter >= original_input_string_length:
+                                                self.next_input_key = self.blank_sym
+                                        elif head_counter < 0:
+                                                self.next_input_key = self.blank_sym
+                                        else:
+                                                 self.next_input_key= self.tape[head_counter]
+                                        
+                                self.current_input_key = self.next_input_key # Move the head to the next position on the tape and make it the current key
+                                self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
+                                print("Head Counter At: " + str(head_counter))        
                                 print("Next Input Key: "+self.current_input_key)
                                 print(self.tape)
                                 print("Moving On............................")
                         except KeyError:
+                                print("Key Error")
                                 pass                
                 print(self.tape)
 
