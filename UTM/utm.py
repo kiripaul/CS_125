@@ -79,7 +79,7 @@ class UTM:
                         print("Current Input on Tape: "+self.current_input_key)
                         print("Current State of TM: "+self.current_state)
                         transition_row = self.transition[self.current_state]# Looking for which state transition we need given the current state
-                        print("Transition Row: "+str(transition_row))
+##                        print("Transition Row: "+str(transition_row))
                         try:
                                 for item in transition_row:
                                         if self.current_input_key in item: # Looking for the proper transition given our key
@@ -139,7 +139,7 @@ Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','
                                                                'q5':[{'0':['q5','-','R']},{'1':['q5','-','R']},{'-':['q6','-','R']}],
                                                                'q6':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q6')
 
-modus_utm = UTM(Modus_TM,'000100')
+modus_utm = UTM(Modus_TM,'00010')
 modus_utm.runUTM()
 
                
