@@ -131,6 +131,7 @@ class UTM:
                         
                 print(self.tape)
 
+
 Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','-','R']},{'1':['q5','-','R']},{'-':['HALT']}],
                                                                'q1':[{'0':['q1','0','R']},{'1':['q2','1','R']},{'-':['HALT']}],
                                                                'q2':[{'0':['q3','1','L']},{'1':['q2','1','R']},{'-':['q4','-','L']}],
@@ -139,10 +140,13 @@ Modus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','
                                                                'q5':[{'0':['q5','-','R']},{'1':['q5','-','R']},{'-':['q6','-','R']}],
                                                                'q6':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q6')
 
-modus_utm = UTM(Modus_TM,'00010')
-modus_utm.runUTM()
+modus_utm = UTM(Modus_TM,'000100')
+#modus_utm.runUTM()
 
+##(States, Input_alphabet, Tape_alphabet, Transition_function, Start_state, Blank_symbol, Finish_state)
                
-        
-
+Non_Terminating_TM = TM(['q0','q1'],[0,1,'-'],{'q0':[{'0':['q0','1','R']},{'-':['q1','-','L']}],
+                                            'q1':[{'1':['q1','0','L']},{'-':['q0','-','R']}] },'q2')
+nt_utm = UTM(Non_Terminating_TM,'00000')
+nt_utm.runUTM()
                 
