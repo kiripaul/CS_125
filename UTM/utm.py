@@ -64,7 +64,7 @@ class UTM:
                 ## @@Returns: Dictionary with keys being int 
                 for i in range(len(self.winput)):
                         self.tape[i] = self.winput[i]
-                print(self.tape)
+                #print(self.tape)
                 
         def finalPrint(self):
                 final_tape = self.tape
@@ -84,10 +84,10 @@ class UTM:
                 original_input_string_length = len(self.tape)
                 halt = False
                 head_counter = 0
-                iterations = 1
+                iterations = 0
                 self.finalPrint()
                 print("==================================================================")
-                print(" >>>>>>>>>>>>> Start String: "+self.final_tape+" <<<<<<<<<<<<<<<")
+                print("          >>>>>>>>>>>>> Start String: "+self.final_tape+" <<<<<<<<<<<<<<<")
                 print("==================================================================")
                 while(halt==False):
                         print("Current Input on Tape: "+self.current_input_key)
@@ -112,10 +112,8 @@ class UTM:
                                         break
                                 self.current_state = next_state   # Setting the current state to be the next state
                                 print("New Symbol to be Written: "+self.transition_bloc[1])
-##                                print("Head Counter At: " + str(head_counter))
                                 self.tape[head_counter] = self.transition_bloc[1]# Writie this symbol into the current position
                                 move_where = self.transition_bloc[2] # Figure out where head moves
-##                                print("Moving to the: "+move_where)
                                 if move_where == 'R':
                                         head_counter+=1
                                         if head_counter >= original_input_string_length:
@@ -135,11 +133,12 @@ class UTM:
                                         
                                 self.current_input_key = self.next_input_key # Move the head to the next position on the tape and make it the current key
                                 self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
-##                                print("Head Counter At: " + str(head_counter))        
                                 print("Next Input Key: "+self.current_input_key)
-                                print("Moving On............................")
+                                print("Head Counter At: " + str(head_counter) + "  Original Input String Length: " +str(original_input_string_length))
+                                print("Moving To: "+ move_where)
                                 self.finalPrint()
                                 print("Current Tape: "+self.final_tape)
+                                print("Length of Tape: "+str(len(list(self.final_tape))))
                                 print("==================================================================")
                                 print("============================>>>"+str(iterations)+"<<<==============================")
                                 print("==================================================================")
@@ -150,9 +149,9 @@ class UTM:
                         
                 self.finalPrint()
                 print("Final String: "+self.final_tape)
-                print("==================================================================")
+                print("==============================^^^^^^^=============================")
                 print("==========================>>>COMPLETE!<<<=========================")
-                print("==================================================================")
+                print("==============================vvvvvvv=============================")
 
 
 
@@ -174,6 +173,9 @@ Non_Terminating_TM = TM(['q0','q1'],[0,1,'-'],{'q0':[{'0':['q0','1','R']},{'-':[
 nt_utm = UTM(Non_Terminating_TM,'00000')
 #nt_utm.runUTM()
 
-Busy_Beaver_3_TM = TM(['q0','q1','q2'],[0,1,'-'],{'q0':[{'0':['q1','1','R']},{'1':['HALT','1','R']}],
-                                                  'q1':[{'0':['q2','0','R']},{'1':['q1','1','R']}],
-                                                  'q2':[{'0':['q2','1','L']},{'1':['q0','1','L']}]},'q0')
+Busy_Beaver_3_TM = TM(['q0','q1','q2'],[0,1,'-'],{'q0':[{'0':['q1','1','R']},{'1':['q4','1','R']},{'-':['q1','1','R']}],
+                                                  'q1':[{'0':['q2','0','R']},{'1':['q1','1','R']},{'-':['q2','0','R']}],
+                                                  'q2':[{'0':['q2','1','L']},{'1':['q0','1','L']},{'-':['q2','1','L']}],
+                                                  'q4':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q4')
+bb3_UTM=UTM(Busy_Beaver_3_TM,'0')
+bb3_UTM.runUTM()
