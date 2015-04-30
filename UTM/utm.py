@@ -144,8 +144,7 @@ class UTM:
                                         iterations +=1
                                 except KeyError:
                                         print("Key Error")
-                                        pass
-                                
+                                        pass     
                         self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
                 else: #Busy Beaver 5 is happening. Don't do print statements
                         start = time.time()
@@ -154,7 +153,7 @@ class UTM:
                                 try:
                                         for item in transition_row:
                                                 if self.current_input_key in item: # Looking for the proper transition given our key
-                                                        self.transition_bloc=item[self.current_input_key]          
+                                                        self.transition_bloc=item[self.current_input_key]
                                         next_state = self.transition_bloc[0] # Get the next State
                                         if next_state == 'HALT' and self.current_state == self.accept:
                                                 print("String has been accepted and consumed")
@@ -165,7 +164,7 @@ class UTM:
                                                 halt = True
                                                 print("String cannot be consumed")
                                                 break
-                                        self.current_state = next_state   # Setting the current state to be the next state
+                                        self.current_state = next_state # Setting the current state to be the next state
                                         self.tape[head_counter] = self.transition_bloc[1]# Writie this symbol into the current position
                                         move_where = self.transition_bloc[2] # Figure out where head moves
                                         if move_where == 'R':
@@ -180,9 +179,7 @@ class UTM:
                                                         self.next_input_key = self.blank
                                                 else:
                                                          self.next_input_key= self.tape[head_counter]
-                                                
                                         self.current_input_key = self.next_input_key # Move the head to the next position on the tape and make it the current key
-                                        #self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
                                         if iterations % 100000 == 0: #only print if iteration is at multiple of 100,000
                                                 print("============================>>>"+str(iterations)+"<<<==============================")
                                         iterations +=1
@@ -195,7 +192,12 @@ class UTM:
                 print("==========================>>>COMPLETE!<<<=========================")
                 print("==============================vvvvvvv=============================")
                 m ,s = divmod((end-start),60)
+                self.finalPrint()
+                if self.bb5 == False:
+                        print("***|Final String: "+self.final_tape)
+                print("***|Total Number of Steps: "+str(iterations-1))
                 print("***|Number of 1's on Tape: " + str(self.final_tape.count('1')))
+                print("***|Number of 0's on Tape: " + str(self.final_tape.count('0')))
                 print("***|Time to Run: %02d:%02d" % (m,s))
                 
 
@@ -208,39 +210,63 @@ Monus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','
                                                                'q4':[{'0':['q4','0','L']},{'1':['q4','-','L']},{'-':['q6','0','R']}],
                                                                'q5':[{'0':['q5','-','R']},{'1':['q5','-','R']},{'-':['q6','-','R']}],
                                                                'q6':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q6')
-
-monus_utm = UTM(Monus_TM,'000100',False)
-#monus_utm.runUTM()
-
-               
+monus_utm = UTM(Monus_TM,'000100',False)             
 Non_Terminating_TM = TM(['q0','q1'],[0,1,'-'],{'q0':[{'0':['q0','1','R']},{'-':['q1','-','L']}],
                                             'q1':[{'1':['q1','0','L']},{'-':['q0','-','R']}] },'q2')
 nt_utm = UTM(Non_Terminating_TM,'00000',False)
-#nt_utm.runUTM()
-
 Busy_Beaver_3_TM = TM(['q0','q1','q2'],[0,1,'-'],{'q0':[{'0':['q1','1','R']},{'1':['q4','1','R']},{'-':['q1','1','R']}],
                                                   'q1':[{'0':['q2','0','R']},{'1':['q1','1','R']},{'-':['q2','0','R']}],
                                                   'q2':[{'0':['q2','1','L']},{'1':['q0','1','L']},{'-':['q2','1','L']}],
                                                   'q4':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q4')
 bb3_UTM=UTM(Busy_Beaver_3_TM,'0',False)
-#bb3_UTM.runUTM()
-
-
 Busy_Beaver_4_TM = TM(['q0','q1','q2','q3'],[0,1,'-'],{'q0':[{'0':['q1','1','R']},{'1':['q1','1','L']},{'-':['q1','1','R']}],
                                                        'q1':[{'0':['q0','1','L']},{'1':['q2','0','L']},{'-':['q0','1','L']}],
                                                        'q2':[{'0':['q4','1','R']},{'1':['q3','1','L']},{'-':['q4','1','R']}],
                                                        'q3':[{'0':['q3','1','R']},{'1':['q0','0','R']},{'-':['q3','1','R']}],
                                                        'q4':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q4')
-
 bb4_UTM=UTM(Busy_Beaver_4_TM,'0',False)
-#bb4_UTM.runUTM()
-
 Busy_Beaver_5_TM = TM(['q0','q1','q2','q3','q4','q5'],[0,1,'-'],{'q0':[{'0':['q1','1','R']},{'1':['q2','1','L']},{'-':['q1','1','R']}],
                                                                  'q1':[{'0':['q2','1','R']},{'1':['q1','1','R']},{'-':['q2','1','R']}],
                                                                  'q2':[{'0':['q3','1','R']},{'1':['q4','0','L']},{'-':['q3','1','R']}],
                                                                  'q3':[{'0':['q0','1','L']},{'1':['q3','1','L']},{'-':['q0','1','L']}],
                                                                  'q4':[{'0':['q5','1','R']},{'1':['q0','0','L']},{'-':['q5','1','R']}],
                                                                  'q5':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q5')
-
 bb5_UTM=UTM(Busy_Beaver_5_TM,'0',True)
-bb5_UTM.runUTM()
+
+
+run_again = True
+while run_again == True:
+        print("=======================================================")
+        print("=======================================================")
+        print("***********************WELCOME!************************")
+        print("Please choose which TM you would like the UTM to run.")
+        print("*** Monus (Proper Subtraction): 1")
+        print("*** Non-Terminating TM: 2")
+        print("*** Busy Beaver 3: 3")
+        print("*** Busy Beaver 4: 4")
+        print("*** Busy Beaver 5: 5 \n")
+        user_choice = input("Which would you like? ")
+        print("*******************************************************")
+        print("=======================================================")
+        print("=======================================================")
+        if user_choice == '1':
+                monus_utm.runUTM()
+        elif user_choice == '2':
+                nt_utm.runUTM()
+        elif user_choice == '3':
+                bb3_UTM.runUTM()
+        elif user_choice == '4':
+                bb4_UTM.runUTM()
+        else:
+                bb5_UTM.runUTM()
+        choice = input("\nWould you like to run a different program (y/n)? ")
+        if choice == 'n':
+                run_again = False
+                
+
+
+
+
+
+
+
