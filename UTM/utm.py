@@ -49,7 +49,7 @@ class TM:
 ## Defining the UTM
 ## The input, winput, for the UTM is assumed to be of a String data type
 class UTM:
-        def __init__(self, TM, winput):
+        def __init__(self, TM, winput,bb5):
                 self.winput = list(winput)
                 self.states = TM.getStates()
                 self.talphabet = TM.getTapeAlphabet()
@@ -58,7 +58,8 @@ class UTM:
                 self.blank = TM.getBlankSymbol()
                 self.accept = TM.getAcceptState()
                 self.tape = {}
-        
+                self.bb5 = bb5
+                
         def loadTape(self):
                 ## @@Takes: self
                 ## @@Returns: Dictionary with keys being int 
@@ -77,6 +78,7 @@ class UTM:
 
         def runUTM(self):
                 import collections
+                import time
                 self.loadTape()
                 self.current_state = self.start_state
                 self.current_input_key = self.tape[0] #current index on tape
@@ -84,70 +86,118 @@ class UTM:
                 original_input_string_length = len(self.tape)
                 halt = False
                 head_counter = 0
-                iterations = 0
+                iterations = 1
                 self.finalPrint()
                 print("==================================================================")
                 print("          >>>>>>>>>>>>> Start String: "+self.final_tape+" <<<<<<<<<<<<<<<")
                 print("==================================================================")
-                while(halt==False):
-                        print("Current Input on Tape: "+self.current_input_key)
-                        print("Current State of TM: "+self.current_state)
-                        transition_row = self.transition[self.current_state]# Looking for which state transition we need given the current state
-##                        print("Transition Row: "+str(transition_row))
-                        try:
-                                for item in transition_row:
-                                        if self.current_input_key in item: # Looking for the proper transition given our key
-                                                self.transition_bloc=item[self.current_input_key]          
-##                                print("Transition Bloc: "+str(self.transition_bloc))
-                                next_state = self.transition_bloc[0] # Get the next State
-                                print("Next State: "+next_state)
-                                if next_state == 'HALT' and self.current_state == self.accept:
-                                        print("String has been accepted and consumed")
-                                        #print(self.tape)
-                                        halt = True
-                                        break
-                                elif next_state == 'HALT' and self.current_state != self.accept:
-                                        halt = True
-                                        print("String cannot be consumed")
-                                        break
-                                self.current_state = next_state   # Setting the current state to be the next state
-                                print("New Symbol to be Written: "+self.transition_bloc[1])
-                                self.tape[head_counter] = self.transition_bloc[1]# Writie this symbol into the current position
-                                move_where = self.transition_bloc[2] # Figure out where head moves
-                                if move_where == 'R':
-                                        head_counter+=1
-                                        if head_counter not in self.tape.keys():
-                                                self.next_input_key = self.blank
-                                        else:
-                                                 self.next_input_key= self.tape[head_counter]
-                                elif move_where == 'L':
-                                        head_counter -=1
-                                        if head_counter not in self.tape.keys():
-                                                self.next_input_key = self.blank
-                                        else:
-                                                 self.next_input_key= self.tape[head_counter]
-                                        
-                                self.current_input_key = self.next_input_key # Move the head to the next position on the tape and make it the current key
-                                self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
-                                print("Next Input Key: "+self.current_input_key)
-##                                print("Head Counter At: " + str(head_counter) + "  Original Input String Length: " +str(original_input_string_length))
-                                print("Moving To: "+ move_where)
-                                self.finalPrint()
-                                print("Current Tape: "+self.final_tape)
-##                                print("Length of Tape: "+str(len(list(self.final_tape))))
-                                print("==================================================================")
-                                print("============================>>>"+str(iterations)+"<<<==============================")
-                                print("==================================================================")
-                                iterations +=1
-                        except KeyError:
-                                print("Key Error")
-                                pass
+                if self.bb5 == False:
+                        start = time.time()
+                        while(halt==False):
+                                print("Current Input on Tape: "+self.current_input_key)
+                                print("Current State of TM: "+self.current_state)
+                                transition_row = self.transition[self.current_state]# Looking for which state transition we need given the current state
+        ##                        print("Transition Row: "+str(transition_row))
+                                try:
+                                        for item in transition_row:
+                                                if self.current_input_key in item: # Looking for the proper transition given our key
+                                                        self.transition_bloc=item[self.current_input_key]          
+        ##                                print("Transition Bloc: "+str(self.transition_bloc))
+                                        next_state = self.transition_bloc[0] # Get the next State
+                                        print("Next State: "+next_state)
+                                        if next_state == 'HALT' and self.current_state == self.accept:
+                                                print("String has been accepted and consumed")
+                                                #print(self.tape)
+                                                halt = True
+                                                break
+                                        elif next_state == 'HALT' and self.current_state != self.accept:
+                                                halt = True
+                                                print("String cannot be consumed")
+                                                break
+                                        self.current_state = next_state   # Setting the current state to be the next state
+                                        print("New Symbol to be Written: "+self.transition_bloc[1])
+                                        self.tape[head_counter] = self.transition_bloc[1]# Writie this symbol into the current position
+                                        move_where = self.transition_bloc[2] # Figure out where head moves
+                                        if move_where == 'R':
+                                                head_counter+=1
+                                                if head_counter not in self.tape.keys():
+                                                        self.next_input_key = self.blank
+                                                else:
+                                                         self.next_input_key= self.tape[head_counter]
+                                        elif move_where == 'L':
+                                                head_counter -=1
+                                                if head_counter not in self.tape.keys():
+                                                        self.next_input_key = self.blank
+                                                else:
+                                                         self.next_input_key= self.tape[head_counter]
+                                                
+                                        self.current_input_key = self.next_input_key # Move the head to the next position on the tape and make it the current key
+                                        print("Next Input Key: "+self.current_input_key)
+        ##                                print("Head Counter At: " + str(head_counter) + "  Original Input String Length: " +str(original_input_string_length))
+                                        print("Moving To: "+ move_where)
+                                        self.finalPrint()
+                                        print("Current Tape: "+self.final_tape)
+        ##                                print("Length of Tape: "+str(len(list(self.final_tape))))
+                                        print("==================================================================")
+                                        print("============================>>>"+str(iterations)+"<<<==============================")
+                                        print("==================================================================")
+                                        iterations +=1
+                                except KeyError:
+                                        print("Key Error")
+                                        pass
+                                
+                        self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
+                else: #Busy Beaver 5 is happening. Don't do print statements
+                        start = time.time()
+                        while(halt==False):
+                                transition_row = self.transition[self.current_state]# Looking for which state transition we need given the current state
+                                try:
+                                        for item in transition_row:
+                                                if self.current_input_key in item: # Looking for the proper transition given our key
+                                                        self.transition_bloc=item[self.current_input_key]          
+                                        next_state = self.transition_bloc[0] # Get the next State
+                                        if next_state == 'HALT' and self.current_state == self.accept:
+                                                print("String has been accepted and consumed")
+                                                #print(self.tape)
+                                                halt = True
+                                                break
+                                        elif next_state == 'HALT' and self.current_state != self.accept:
+                                                halt = True
+                                                print("String cannot be consumed")
+                                                break
+                                        self.current_state = next_state   # Setting the current state to be the next state
+                                        self.tape[head_counter] = self.transition_bloc[1]# Writie this symbol into the current position
+                                        move_where = self.transition_bloc[2] # Figure out where head moves
+                                        if move_where == 'R':
+                                                head_counter+=1
+                                                if head_counter not in self.tape.keys():
+                                                        self.next_input_key = self.blank
+                                                else:
+                                                         self.next_input_key= self.tape[head_counter]
+                                        elif move_where == 'L':
+                                                head_counter -=1
+                                                if head_counter not in self.tape.keys():
+                                                        self.next_input_key = self.blank
+                                                else:
+                                                         self.next_input_key= self.tape[head_counter]
+                                                
+                                        self.current_input_key = self.next_input_key # Move the head to the next position on the tape and make it the current key
+                                        #self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
+                                        if iterations % 100000 == 0: #only print if iteration is at multiple of 100,000
+                                                print("============================>>>"+str(iterations)+"<<<==============================")
+                                        iterations +=1
+                                except KeyError:
+                                        print("Key Error")
+                                        pass
                         
-                self.finalPrint()
-                print("Final String: "+self.final_tape)
+                end = time.time()
                 print("==============================^^^^^^^=============================")
                 print("==========================>>>COMPLETE!<<<=========================")
                 print("==============================vvvvvvv=============================")
+                m ,s = divmod((end-start),60)
+                print("***|Number of 1's on Tape: " + str(self.final_tape.count('1')))
+                print("***|Time to Run: %02d:%02d" % (m,s))
+                
 
 
 
@@ -159,19 +209,38 @@ Monus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','
                                                                'q5':[{'0':['q5','-','R']},{'1':['q5','-','R']},{'-':['q6','-','R']}],
                                                                'q6':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q6')
 
-monus_utm = UTM(Monus_TM,'000100')
-monus_utm.runUTM()
+monus_utm = UTM(Monus_TM,'000100',False)
+#monus_utm.runUTM()
 
-##(States, Input_alphabet, Tape_alphabet, Transition_function, Start_state, Blank_symbol, Finish_state)
                
 Non_Terminating_TM = TM(['q0','q1'],[0,1,'-'],{'q0':[{'0':['q0','1','R']},{'-':['q1','-','L']}],
                                             'q1':[{'1':['q1','0','L']},{'-':['q0','-','R']}] },'q2')
-nt_utm = UTM(Non_Terminating_TM,'00000')
+nt_utm = UTM(Non_Terminating_TM,'00000',False)
 #nt_utm.runUTM()
 
 Busy_Beaver_3_TM = TM(['q0','q1','q2'],[0,1,'-'],{'q0':[{'0':['q1','1','R']},{'1':['q4','1','R']},{'-':['q1','1','R']}],
                                                   'q1':[{'0':['q2','0','R']},{'1':['q1','1','R']},{'-':['q2','0','R']}],
                                                   'q2':[{'0':['q2','1','L']},{'1':['q0','1','L']},{'-':['q2','1','L']}],
                                                   'q4':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q4')
-bb3_UTM=UTM(Busy_Beaver_3_TM,'0')
+bb3_UTM=UTM(Busy_Beaver_3_TM,'0',False)
 #bb3_UTM.runUTM()
+
+
+Busy_Beaver_4_TM = TM(['q0','q1','q2','q3'],[0,1,'-'],{'q0':[{'0':['q1','1','R']},{'1':['q1','1','L']},{'-':['q1','1','R']}],
+                                                       'q1':[{'0':['q0','1','L']},{'1':['q2','0','L']},{'-':['q0','1','L']}],
+                                                       'q2':[{'0':['q4','1','R']},{'1':['q3','1','L']},{'-':['q4','1','R']}],
+                                                       'q3':[{'0':['q3','1','R']},{'1':['q0','0','R']},{'-':['q3','1','R']}],
+                                                       'q4':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q4')
+
+bb4_UTM=UTM(Busy_Beaver_4_TM,'0',False)
+#bb4_UTM.runUTM()
+
+Busy_Beaver_5_TM = TM(['q0','q1','q2','q3','q4','q5'],[0,1,'-'],{'q0':[{'0':['q1','1','R']},{'1':['q2','1','L']},{'-':['q1','1','R']}],
+                                                                 'q1':[{'0':['q2','1','R']},{'1':['q1','1','R']},{'-':['q2','1','R']}],
+                                                                 'q2':[{'0':['q3','1','R']},{'1':['q4','0','L']},{'-':['q3','1','R']}],
+                                                                 'q3':[{'0':['q0','1','L']},{'1':['q3','1','L']},{'-':['q0','1','L']}],
+                                                                 'q4':[{'0':['q5','1','R']},{'1':['q0','0','L']},{'-':['q5','1','R']}],
+                                                                 'q5':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q5')
+
+bb5_UTM=UTM(Busy_Beaver_5_TM,'0',True)
+bb5_UTM.runUTM()
