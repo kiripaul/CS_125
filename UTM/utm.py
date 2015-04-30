@@ -116,17 +116,13 @@ class UTM:
                                 move_where = self.transition_bloc[2] # Figure out where head moves
                                 if move_where == 'R':
                                         head_counter+=1
-                                        if head_counter >= original_input_string_length:
-                                                self.next_input_key = self.blank
-                                        elif head_counter < 0:
+                                        if head_counter not in self.tape.keys():
                                                 self.next_input_key = self.blank
                                         else:
                                                  self.next_input_key= self.tape[head_counter]
                                 elif move_where == 'L':
                                         head_counter -=1
-                                        if head_counter >= original_input_string_length:
-                                                self.next_input_key = self.blank
-                                        elif head_counter < 0:
+                                        if head_counter not in self.tape.keys():
                                                 self.next_input_key = self.blank
                                         else:
                                                  self.next_input_key= self.tape[head_counter]
@@ -134,11 +130,11 @@ class UTM:
                                 self.current_input_key = self.next_input_key # Move the head to the next position on the tape and make it the current key
                                 self.tape = collections.OrderedDict(sorted(self.tape.items())) # Organizing the tape dicitonary
                                 print("Next Input Key: "+self.current_input_key)
-                                print("Head Counter At: " + str(head_counter) + "  Original Input String Length: " +str(original_input_string_length))
+##                                print("Head Counter At: " + str(head_counter) + "  Original Input String Length: " +str(original_input_string_length))
                                 print("Moving To: "+ move_where)
                                 self.finalPrint()
                                 print("Current Tape: "+self.final_tape)
-                                print("Length of Tape: "+str(len(list(self.final_tape))))
+##                                print("Length of Tape: "+str(len(list(self.final_tape))))
                                 print("==================================================================")
                                 print("============================>>>"+str(iterations)+"<<<==============================")
                                 print("==================================================================")
@@ -164,7 +160,7 @@ Monus_TM = TM(['q0','q1','q2','q3','q4','q5','q6'],[0,1,'-'],{'q0':[{'0':['q1','
                                                                'q6':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q6')
 
 monus_utm = UTM(Monus_TM,'000100')
-#monus_utm.runUTM()
+monus_utm.runUTM()
 
 ##(States, Input_alphabet, Tape_alphabet, Transition_function, Start_state, Blank_symbol, Finish_state)
                
@@ -178,4 +174,4 @@ Busy_Beaver_3_TM = TM(['q0','q1','q2'],[0,1,'-'],{'q0':[{'0':['q1','1','R']},{'1
                                                   'q2':[{'0':['q2','1','L']},{'1':['q0','1','L']},{'-':['q2','1','L']}],
                                                   'q4':[{'0':['HALT']},{'1':['HALT']},{'-':['HALT']}]},'q4')
 bb3_UTM=UTM(Busy_Beaver_3_TM,'0')
-bb3_UTM.runUTM()
+#bb3_UTM.runUTM()
