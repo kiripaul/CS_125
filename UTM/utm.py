@@ -181,10 +181,11 @@ class UTM:
                                                          self.next_input_key= self.tape[head_counter]
                                         self.current_input_key = self.next_input_key # Move the head to the next position on the tape and make it the current key
                                         if iterations % 100000 == 0: #only print if iteration is at multiple of 100,000
-##                                                str1 = "============================>>>"
-##                                                str2 = "<<<=============================="
-##                                                print(str1+str(iterations)+str2)
-                                                print("============================>>>"+str(iterations)+"<<<==============================")
+                                                str1 = "============================>>>"
+                                                str2 = "<<<=============================="
+                                                iters = str(iterations)
+                                                print("%s %s %s" % (str1,iters, str2))
+##                                                print("============================>>>"+str(iterations)+"<<<==============================")
                                         iterations +=1
                                 except KeyError:
                                         print("Key Error")
