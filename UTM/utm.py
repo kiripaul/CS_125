@@ -181,6 +181,9 @@ class UTM:
                                                          self.next_input_key= self.tape[head_counter]
                                         self.current_input_key = self.next_input_key # Move the head to the next position on the tape and make it the current key
                                         if iterations % 100000 == 0: #only print if iteration is at multiple of 100,000
+##                                                str1 = "============================>>>"
+##                                                str2 = "<<<=============================="
+##                                                print(str1+str(iterations)+str2)
                                                 print("============================>>>"+str(iterations)+"<<<==============================")
                                         iterations +=1
                                 except KeyError:
@@ -236,19 +239,20 @@ bb5_UTM=UTM(Busy_Beaver_5_TM,'0',True)
 
 run_again = True
 while run_again == True:
-        print("=======================================================")
-        print("=======================================================")
-        print("***********************WELCOME!************************")
-        print("Please choose which TM you would like the UTM to run.")
-        print("*** Monus (Proper Subtraction): 1")
-        print("*** Non-Terminating TM: 2")
-        print("*** Busy Beaver 3: 3")
-        print("*** Busy Beaver 4: 4")
-        print("*** Busy Beaver 5: 5 \n")
-        user_choice = input("Which would you like? ")
-        print("*******************************************************")
-        print("=======================================================")
-        print("=======================================================")
+##        print("=======================================================")
+##        print("=======================================================")
+##        print("***********************WELCOME!************************")
+##        print("Please choose which TM you would like the UTM to run.")
+##        print("*** Monus (Proper Subtraction): 1")
+##        print("*** Non-Terminating TM: 2")
+##        print("*** Busy Beaver 3: 3")
+##        print("*** Busy Beaver 4: 4")
+##        print("*** Busy Beaver 5: 5 \n")
+##        user_choice = input("Which would you like? ")
+##        print("*******************************************************")
+##        print("=======================================================")
+##        print("=======================================================")
+        user_choice = '5'
         if user_choice == '1':
                 monus_utm.runUTM()
         elif user_choice == '2':
@@ -259,9 +263,10 @@ while run_again == True:
                 bb4_UTM.runUTM()
         else:
                 bb5_UTM.runUTM()
-        choice = input("\nWould you like to run a different program (y/n)? ")
-        if choice == 'n':
-                run_again = False
+        run_again = False
+##        choice = input("\nWould you like to run a different program (y/n)? ")
+##        if choice == 'n':
+##                run_again = False
                 
 
 
